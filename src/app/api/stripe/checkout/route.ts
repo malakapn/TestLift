@@ -23,8 +23,8 @@ export async function POST() {
           },
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/stage1?checkout=success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/stage1?checkout=cancel`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://testlift.dev"}/stage1?checkout=success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://testlift.dev"}/stage1?checkout=cancel`,
     });
 
     return NextResponse.json({ url: session.url });
