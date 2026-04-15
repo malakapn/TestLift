@@ -1,8 +1,12 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseConfig } from "./env";
 
-const { url, anonKey } = getSupabaseConfig();
+let supabase: SupabaseClient | null = null;
 
-export function getSupabaseClient() {
-  return createClient(url, anonKey);
+export function getSupabaseClient(): SupabaseClient {
+  if (!supabase) {
+    const { url, anonKey } = getSupabaseConfig();
+    supabase = createClient(url, anonKey);
+  }
+  return supabase;
 }
