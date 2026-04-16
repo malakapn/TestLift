@@ -1,6 +1,24 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { AppShell } from "@/components/app-shell";
+import { Syne, DM_Sans, DM_Mono } from "next/font/google";
+
+const syne = Syne({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  variable: "--font-heading",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-body",
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: "TestLift - AI test automation",
@@ -14,8 +32,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body className="min-h-full bg-slate-950 text-slate-100 antialiased">
-        <AppShell>{children}</AppShell>
+      <body className={`${syne.variable} ${dmSans.variable} ${dmMono.variable} min-h-full antialiased`}>
+        {children}
       </body>
     </html>
   );

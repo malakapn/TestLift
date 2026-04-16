@@ -2,11 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: #09090b;
+  --bg2: #111113;
+  --bg3: #18181b;
+  --bg4: #1c1c1f;
+  --border: #2a2a2e;
+  --border2: #333337;
+  --txt: #f4f4f5;
+  --txt2: #a1a1aa;
+  --txt3: #71717a;
+  --accent: #00d4aa;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --green: #22c55e;
+  --purple: #a78bfa;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: Inter, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--font-body), Arial, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading), sans-serif;
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-mono), monospace;
+}
+
+.flash-highlight {
+  animation: statFlash 420ms ease;
+}
+
+.pulse-dot {
+  animation: pulseDot 1.5s ease-in-out infinite;
+}
+
+@keyframes statFlash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(0, 212, 170, 0);
+  }
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.8;
+  }
 }
