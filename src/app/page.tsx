@@ -5,14 +5,14 @@ export default function HomePage() {
     <main className="min-h-screen bg-[var(--bg)] text-[var(--txt)]">
       <section className="mx-auto max-w-7xl px-6 pb-20 pt-12 md:pb-24 md:pt-16">
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 md:p-14">
-          <p className="mb-5 text-sm font-medium tracking-wide text-[var(--txt2)]">QA Governance Platform</p>
-          <h1 className="max-w-5xl text-5xl font-extrabold leading-tight md:text-7xl">
+          <p className="mb-5 text-sm font-medium tracking-wide text-[var(--txt2)]">QA Governance Layer</p>
+          <h1 className="max-w-5xl text-5xl font-semibold leading-[1.02] tracking-[-0.02em] md:text-7xl">
             Stop broken test logic from reaching production
           </h1>
           <p className="mt-7 max-w-3xl text-lg leading-relaxed text-[var(--txt2)]">
-            TestLift is a QA governance layer that ensures only validated test cases enter CI/CD
-            pipelines through structured multi-user approvals.
+            TestLift is a QA governance layer for CI/CD pipelines.
           </p>
+          <p className="mt-2 text-base font-medium text-[var(--accent)]">Govern what reaches production.</p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
               href="/workflow"
@@ -29,7 +29,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <section className="mt-10">
+        <section className="mt-14">
           <h2 className="text-2xl font-bold">Problem Overview</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {[
@@ -38,14 +38,17 @@ export default function HomePage() {
               "CI/CD pipeline failures triggered by bad automated tests",
               "QA governance complexity increases with scale",
             ].map((item) => (
-              <article key={item} className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-5">
+              <article
+                key={item}
+                className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-5 transition hover:-translate-y-0.5 hover:border-[var(--border2)]"
+              >
                 <p className="text-sm leading-relaxed text-[var(--txt2)]">{item}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="mt-10 rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6 md:p-8">
+        <section className="mt-14 rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-6 md:p-8">
           <h2 className="text-2xl font-bold">Solution Overview</h2>
           <div className="mt-5 grid gap-3 md:grid-cols-4">
             {[
@@ -54,7 +57,10 @@ export default function HomePage() {
               "Approve / Reject / Modify",
               "CI/CD readiness gate",
             ].map((step, idx) => (
-              <div key={step} className="rounded-xl border border-[var(--border)] bg-[var(--bg3)] p-4">
+              <div
+                key={step}
+                className="rounded-xl border border-[var(--border)] bg-[var(--bg3)] p-4 transition hover:border-[var(--border2)]"
+              >
                 <p className="text-xs uppercase tracking-wide text-[var(--txt3)]">Step {idx + 1}</p>
                 <p className="mt-1 text-sm font-medium text-[var(--txt)]">{step}</p>
               </div>
@@ -62,7 +68,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="mt-10 grid gap-4 md:grid-cols-2">
+        <section className="mt-14 grid gap-4 md:grid-cols-2">
           <div className="rounded-xl border border-[var(--border)] bg-[var(--bg2)] p-6">
             <h2 className="text-2xl font-bold">Why TestLift</h2>
             <div className="mt-4 space-y-2 text-[var(--txt2)]">
@@ -95,7 +101,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="mt-10 rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
+        <section className="mt-14 rounded-2xl border border-[var(--border)] bg-[var(--bg2)] p-8 text-center">
           <h2 className="text-3xl font-bold">Govern test quality before it reaches your pipeline</h2>
           <p className="mx-auto mt-3 max-w-2xl text-[var(--txt2)]">
             Replace fragile automation trust with a structured approval gate built for enterprise
@@ -117,7 +123,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <div className="mt-10 text-sm text-[var(--txt3)]">© {new Date().getFullYear()} TestLift</div>
+        <div className="mt-10 text-sm text-[var(--txt3)]">
+          © {new Date().getFullYear()} TestLift · Govern what reaches production.
+        </div>
       </section>
     </main>
   );

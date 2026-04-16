@@ -13,7 +13,7 @@ export function GlobalNav() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-40 border-b border-[var(--border)] bg-[var(--bg2)]/95 backdrop-blur">
+    <header className="fixed left-0 right-0 top-0 z-40 border-b border-[var(--border)] bg-[var(--bg2)]/92 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
         <Link href="/" className="text-sm font-semibold tracking-wide text-[var(--txt)]">
           TestLift
@@ -30,8 +30,8 @@ export function GlobalNav() {
                 href={item.href}
                 className={`rounded-md px-3 py-1.5 text-sm transition ${
                   active
-                    ? "bg-[var(--bg3)] text-[var(--txt)]"
-                    : "text-[var(--txt2)] hover:bg-[var(--bg3)] hover:text-[var(--txt)]"
+                    ? "border border-[var(--border2)] bg-[var(--bg3)] text-[var(--txt)]"
+                    : "border border-transparent text-[var(--txt2)] hover:border-[var(--border)] hover:bg-[var(--bg3)] hover:text-[var(--txt)]"
                 }`}
               >
                 {item.label}

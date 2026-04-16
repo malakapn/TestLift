@@ -359,7 +359,7 @@ export default function WorkflowPage() {
       <header className="fixed left-0 right-0 top-0 z-30 flex h-14 items-center justify-between border-b border-[var(--border)] bg-[var(--bg2)] px-5">
         <div>
           <p className="text-sm text-[var(--txt3)]">TestLift Governance Console</p>
-          <p className="text-sm font-medium">Overview</p>
+          <p className="text-sm font-medium">Pipeline validation overview</p>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -436,11 +436,11 @@ export default function WorkflowPage() {
               <p className="text-[var(--green)]">✔ Approved Tests Ready: {counts.pipelineReady}</p>
               <p className="text-[var(--warn)]">⏳ Pending Approval: {counts.pending + counts.inReview}</p>
               <p className="text-[var(--danger)]">✖ Rejected: {counts.rejected}</p>
-              <div className="mt-3 rounded-md border border-[var(--accent)] bg-[rgba(0,212,170,0.1)] px-2 py-1 text-xs text-[var(--accent)]">
+              <div className="mt-3 rounded-md border border-[var(--accent)] bg-[rgba(59,130,246,0.1)] px-2 py-1 text-xs text-[var(--accent)]">
                 <span className="pulse-dot mr-2 inline-block h-2 w-2 rounded-full bg-[var(--accent)]" />
                 {counts.pipelineReady > 0
-                  ? `Gate open — ${counts.pipelineReady} test case(s) pipeline-ready`
-                  : `Blocked — pending QA approval on ${Math.max(1, counts.pending + counts.inReview)} test case(s)`}
+                  ? `Validation gate open — ${counts.pipelineReady} test case(s) pipeline-ready`
+                  : `Blocked — awaiting governance approval on ${Math.max(1, counts.pending + counts.inReview)} test case(s)`}
               </div>
             </div>
           </div>

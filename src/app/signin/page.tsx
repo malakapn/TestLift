@@ -46,7 +46,7 @@ export default function SignInPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[var(--bg)] px-6 py-12 text-[var(--txt)]">
-      <div className="w-full max-w-[380px] rounded-[14px] border border-[var(--border)] bg-[var(--bg2)] p-7 shadow-2xl shadow-black/20">
+      <div className="w-full max-w-[380px] rounded-[14px] border border-[var(--border)] bg-[var(--bg2)] p-7">
         <p className="text-sm font-medium text-[var(--accent)]">TestLift</p>
         <h2 className="mt-3 text-3xl font-extrabold">Welcome back</h2>
         <p className="mt-2 text-sm text-[var(--txt2)]">Sign in to your QA governance dashboard</p>
@@ -60,7 +60,7 @@ export default function SignInPage() {
           <button
             type="button"
             onClick={() => void handleGithubSignIn()}
-            className="w-full rounded-[10px] border border-[var(--border2)] bg-transparent px-4 py-2.5 font-medium text-[var(--txt)] transition hover:border-[var(--accent)]"
+            className="w-full rounded-[10px] border border-[var(--border)] bg-transparent px-4 py-2.5 font-medium text-[var(--txt)] transition hover:border-[var(--border2)]"
           >
             Continue with GitHub
           </button>
@@ -108,7 +108,7 @@ export default function SignInPage() {
               autoCapitalize="none"
               spellCheck={false}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-[10px] border border-[var(--border)] bg-[var(--bg4)] px-3 py-2 outline-none transition focus:border-[var(--accent)]"
+              className="w-full rounded-[10px] border border-[var(--border)] bg-[var(--bg4)] px-3 py-2 outline-none transition focus:border-[var(--info)]"
             />
           </div>
           <div>
@@ -125,7 +125,7 @@ export default function SignInPage() {
               name="no-autofill-password"
               autoComplete="new-password"
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-[10px] border border-[var(--border)] bg-[var(--bg4)] px-3 py-2 outline-none transition focus:border-[var(--accent)]"
+              className="w-full rounded-[10px] border border-[var(--border)] bg-[var(--bg4)] px-3 py-2 outline-none transition focus:border-[var(--info)]"
             />
           </div>
           <button
