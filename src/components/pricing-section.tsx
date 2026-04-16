@@ -44,8 +44,8 @@ export function PricingSection({ plans }: { plans: Plan[] }) {
             style={{
               borderRadius: "6px",
               fontWeight: billing === "monthly" ? 600 : 400,
-              background: billing === "monthly" ? "#ffffff" : "transparent",
-              color: billing === "monthly" ? "#000000" : "#a1a1aa",
+              background: billing === "monthly" ? "#4f8ff8" : "transparent",
+              color: billing === "monthly" ? "#ffffff" : "#a1a1aa",
               border: "none",
               padding: "6px 12px",
               fontSize: "14px",
@@ -60,8 +60,8 @@ export function PricingSection({ plans }: { plans: Plan[] }) {
             style={{
               borderRadius: "6px",
               fontWeight: billing === "annual" ? 600 : 400,
-              background: billing === "annual" ? "#ffffff" : "transparent",
-              color: billing === "annual" ? "#000000" : "#a1a1aa",
+              background: billing === "annual" ? "#4f8ff8" : "transparent",
+              color: billing === "annual" ? "#ffffff" : "#a1a1aa",
               border: "none",
               padding: "6px 12px",
               fontSize: "14px",
@@ -72,7 +72,7 @@ export function PricingSection({ plans }: { plans: Plan[] }) {
           </button>
           <span
             style={{
-              background: "#00c9a7",
+              background: "#4f8ff8",
               color: "#ffffff",
               fontSize: "11px",
               fontWeight: 600,
@@ -85,9 +85,9 @@ export function PricingSection({ plans }: { plans: Plan[] }) {
         </div>
       </div>
 
-      <div className="mb-4 rounded-xl border border-teal-800 bg-slate-900/70 p-4">
+      <div className="mb-4 rounded-xl border border-[#4f8ff8]/45 bg-slate-900/70 p-4">
         <h3 className="font-semibold">
-          <span className="inline-block rounded-md bg-[#ffffff] px-2 py-0.5 text-[#000000]">Free Tier</span>
+          <span className="inline-block rounded-md bg-[#4f8ff8] px-2 py-0.5 text-[#ffffff]">Free Tier</span>
         </h3>
         <p className="text-sm text-slate-300">3 uploads lifetime, Python only, no credit card required.</p>
       </div>
@@ -98,7 +98,7 @@ export function PricingSection({ plans }: { plans: Plan[] }) {
           return (
             <article key={plan.key} className="relative rounded-xl border border-slate-800 bg-slate-900 p-5">
               {plan.popular && (
-                <span className="absolute -top-2 right-3 rounded-full bg-[#ffffff] px-3 py-1 text-xs font-semibold text-[#000000]">
+                <span className="absolute -top-2 right-3 rounded-full bg-[#4f8ff8] px-3 py-1 text-xs font-semibold text-[#ffffff]">
                   Most Popular
                 </span>
               )}
