@@ -34,10 +34,11 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAuthPage = request.nextUrl.pathname.startsWith("/auth");
+  const pathname = request.nextUrl.pathname;
+  const isLoginForm = pathname === "/auth" || pathname === "/auth/";
   const isProtected =
-    request.nextUrl.pathname.startsWith("/dashboard") ||
-    request.nextUrl.pathname.startsWith("/stage");
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/stage");
 
   if (!user && isProtected) {
     const redirectUrl = request.nextUrl.clone();
@@ -45,7 +46,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (user && isAuthPage) {
+  // OAuth completes at /auth/callback — do not redirect that path away from the exchange handler.
+  if (user && isLoginForm) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/dashboard";
     return NextResponse.redirect(redirectUrl);
@@ -55,5 +57,14 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/auth", "/dashboard/:path*", "/stage1", "/stage2", "/stage3", "/stage4", "/stage5"],
+  matcher: [
+    "/auth",
+    "/auth/callback",
+    "/dashboard/:path*",
+    "/stage1",
+    "/stage2",
+    "/stage3",
+    "/stage4",
+    "/stage5",
+  ],
 };
