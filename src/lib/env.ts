@@ -1,4 +1,3 @@
-const requiredPublicVars = ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY"] as const;
 const requiredServerVars = ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"] as const;
 
 function validate(keys: readonly string[]) {
@@ -9,12 +8,28 @@ function validate(keys: readonly string[]) {
   }
 }
 
-export function getSupabaseConfig() {
-  validate(requiredPublicVars);
-  return {
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-    anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
-  };
+/**
+ * Public Supabase URL + anon key. In development, throws a message that points to .env.local.
+ */
+export function getSupabaseConfig(): { url: string; anonKey: string } {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+  const missing: string[] = [];
+  if (!url) missing.push("NEXT_PUBLIC_SUPABASE_URL");
+  if (!anonKey) missing.push("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+
+  if (missing.length > 0) {
+    if (process.env.NODE_ENV === "development") {
+      throw new Error(
+        `TestLift Supabase is not configured. Missing: ${missing.join(", ")}.\n` +
+          `Copy .env.example to .env.local in the project root, set NEXT_PUBLIC_SUPABASE_URL and ` +
+          `NEXT_PUBLIC_SUPABASE_ANON_KEY, then restart the dev server (npm run dev).`
+      );
+    }
+    throw new Error(`Missing required env var: ${missing[0]}`);
+  }
+
+  return { url: url as string, anonKey: anonKey as string };
 }
 
 export function getAppUrl() {
