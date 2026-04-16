@@ -60,7 +60,10 @@ export function PricingSection({ plans }: { plans: Plan[] }) {
             <form action="/api/stripe/checkout" method="POST" className="mt-5">
               <input type="hidden" name="tier" value={plan.key} />
               <input type="hidden" name="period" value={period} />
-              <button className="w-full rounded-lg bg-teal-400 px-4 py-2 font-semibold text-slate-950">
+              <button
+                type="submit"
+                className="w-full rounded-lg bg-[var(--accent)] px-4 py-2 font-semibold text-white transition hover:brightness-110"
+              >
                 Start Free Trial
               </button>
             </form>
