@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Syne, DM_Sans, DM_Mono } from "next/font/google";
+import { GlobalNav } from "@/components/global-nav";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -33,7 +34,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className={`${syne.variable} ${dmSans.variable} ${dmMono.variable} min-h-full antialiased`}>
-        {children}
+        <GlobalNav />
+        <div className="pt-14">{children}</div>
       </body>
     </html>
   );
