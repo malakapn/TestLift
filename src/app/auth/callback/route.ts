@@ -52,5 +52,7 @@ export async function GET(request: Request) {
     );
   }
 
-  return NextResponse.redirect(`${origin}${next}`);
+  const redirectTo = new URL(next, origin);
+  redirectTo.search = "";
+  return NextResponse.redirect(redirectTo.toString());
 }

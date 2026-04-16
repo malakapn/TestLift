@@ -32,10 +32,11 @@ export default function AuthPage() {
 
   async function oauth(provider: "google" | "github") {
     if (!supabase) return;
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        redirectTo: `${appUrl}/auth/callback?next=/dashboard`,
       },
     });
     if (error) setMessage(error.message);

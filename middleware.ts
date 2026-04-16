@@ -4,6 +4,19 @@ import { getSupabaseConfig } from "@/lib/env";
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({ request });
+  const pathname = request.nextUrl.pathname;
+  const code = request.nextUrl.searchParams.get("code");
+
+  // If OAuth returns code to any route other than /auth/callback, normalize it.
+  if (code && pathname !== "/auth/callback") {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/auth/callback";
+    if (!redirectUrl.searchParams.get("next")) {
+      redirectUrl.searchParams.set("next", "/dashboard");
+    }
+    return NextResponse.redirect(redirectUrl);
+  }
+
   let url: string;
   let anonKey: string;
   try {
@@ -34,7 +47,6 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const pathname = request.nextUrl.pathname;
   const isLoginForm = pathname === "/auth" || pathname === "/auth/";
   const isProtected =
     pathname.startsWith("/dashboard") ||
