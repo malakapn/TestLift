@@ -35,8 +35,20 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertError || !testCaseData) {
+      const details = insertError?.message ?? "Failed to create test case record.";
+      if (details.includes("Could not find the table") || details.includes("schema cache")) {
+        return NextResponse.json(
+          {
+            error:
+              "Database schema is not initialized. Run supabase/migrations/202604150001_create_testlift_core.sql in your Supabase SQL editor, then retry upload.",
+            code: "DB_SCHEMA_MISSING",
+            details,
+          },
+          { status: 500 }
+        );
+      }
       return NextResponse.json(
-        { error: insertError?.message ?? "Failed to create test case record." },
+        { error: details },
         { status: 500 }
       );
     }
