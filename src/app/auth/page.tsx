@@ -1,16 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export default function AuthPage() {
-  const supabase = createSupabaseBrowserClient();
+  const supabaseInit = useMemo(() => {
+    try {
+      return { client: createSupabaseBrowserClient(), error: null as string | null };
+    } catch (error) {
+      return {
+        client: null,
+        error: error instanceof Error ? error.message : "Supabase environment is not configured.",
+      };
+    }
+  }, []);
+  const supabase = supabaseInit.client;
+  const supabaseError = supabaseInit.error;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [message, setMessage] = useState("");
 
   async function handleAuth() {
+    if (!supabase) return;
     setMessage("");
     const fn = mode === "login" ? supabase.auth.signInWithPassword : supabase.auth.signUp;
     const { error } = await fn({ email, password });
@@ -19,6 +31,7 @@ export default function AuthPage() {
   }
 
   async function oauth(provider: "google" | "github") {
+    if (!supabase) return;
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo: `${window.location.origin}/dashboard` },
@@ -31,6 +44,11 @@ export default function AuthPage() {
       <div className="rounded-xl border border-slate-800 bg-slate-900 p-6">
         <h1 className="text-2xl font-semibold">Sign in to TestLift</h1>
         <p className="mt-2 text-sm text-slate-400">Use Google, GitHub, or email/password.</p>
+        {supabaseError && (
+          <p className="mt-3 rounded bg-rose-950/50 p-2 text-xs text-rose-300">
+            Auth is unavailable: {supabaseError}
+          </p>
+        )}
         <div className="mt-5 grid gap-2">
           <button onClick={() => oauth("google")} className="rounded bg-slate-800 px-4 py-2">
             Continue with Google

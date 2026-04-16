@@ -4,7 +4,15 @@ import { getSupabaseConfig } from "@/lib/env";
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({ request });
-  const { url, anonKey } = getSupabaseConfig();
+  let url: string;
+  let anonKey: string;
+  try {
+    const config = getSupabaseConfig();
+    url = config.url;
+    anonKey = config.anonKey;
+  } catch {
+    return response;
+  }
 
   const supabase = createServerClient(url, anonKey, {
     cookies: {
