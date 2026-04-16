@@ -1,16 +1,5 @@
 {
   "framework": "nextjs",
   "buildCommand": "next build",
-  "outputDirectory": ".next",
-  "testlift": {
-    "requiredEnvironmentVariables": [
-      "NEXT_PUBLIC_SUPABASE_URL",
-      "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-      "NEXT_PUBLIC_APP_URL",
-      "ANTHROPIC_API_KEY",
-      "STRIPE_SECRET_KEY",
-      "STRIPE_WEBHOOK_SECRET"
-    ],
-    "notes": "Set these in the Vercel project Settings → Environment Variables (Production/Preview). For local development, copy .env.example to .env.local and fill values."
-  }
+  "outputDirectory": ".next"
 }

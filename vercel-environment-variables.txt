@@ -1,0 +1,10 @@
+Required in Vercel: Project Settings → Environment Variables (set for Production and Preview as needed).
+
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_APP_URL
+ANTHROPIC_API_KEY
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET
+
+Local development: copy .env.example to .env.local and fill values, then npm run dev.
