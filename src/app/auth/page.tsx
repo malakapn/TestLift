@@ -1,0 +1,67 @@
+"use client";
+
+import { useState } from "react";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+
+export default function AuthPage() {
+  const supabase = createSupabaseBrowserClient();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [message, setMessage] = useState("");
+
+  async function handleAuth() {
+    setMessage("");
+    const fn = mode === "login" ? supabase.auth.signInWithPassword : supabase.auth.signUp;
+    const { error } = await fn({ email, password });
+    if (error) setMessage(error.message);
+    else window.location.href = "/dashboard";
+  }
+
+  async function oauth(provider: "google" | "github") {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo: `${window.location.origin}/dashboard` },
+    });
+    if (error) setMessage(error.message);
+  }
+
+  return (
+    <main className="mx-auto max-w-md px-6 py-14">
+      <div className="rounded-xl border border-slate-800 bg-slate-900 p-6">
+        <h1 className="text-2xl font-semibold">Sign in to TestLift</h1>
+        <p className="mt-2 text-sm text-slate-400">Use Google, GitHub, or email/password.</p>
+        <div className="mt-5 grid gap-2">
+          <button onClick={() => oauth("google")} className="rounded bg-slate-800 px-4 py-2">
+            Continue with Google
+          </button>
+          <button onClick={() => oauth("github")} className="rounded bg-slate-800 px-4 py-2">
+            Continue with GitHub
+          </button>
+        </div>
+        <div className="mt-5 space-y-2">
+          <input
+            className="w-full rounded border border-slate-700 bg-slate-950 px-3 py-2"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            className="w-full rounded border border-slate-700 bg-slate-950 px-3 py-2"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button onClick={handleAuth} className="w-full rounded bg-teal-400 px-4 py-2 font-semibold text-slate-950">
+            {mode === "login" ? "Login" : "Create account"}
+          </button>
+          <button onClick={() => setMode(mode === "login" ? "signup" : "login")} className="w-full text-sm text-teal-300">
+            {mode === "login" ? "Need an account? Sign up" : "Have an account? Log in"}
+          </button>
+        </div>
+        {message && <p className="mt-3 text-sm text-rose-300">{message}</p>}
+      </div>
+    </main>
+  );
+}

@@ -1,0 +1,40 @@
+export const plans = [
+  {
+    key: "starter",
+    name: "Starter",
+    monthly: "$9.99",
+    annual: "$99.99",
+    annualLabel: "Saves ~$20",
+    description: "Best for solo testers.",
+    features: ["Up to 10 uploads/month", "Python scripts", "Email support"],
+  },
+  {
+    key: "pro",
+    name: "Pro",
+    monthly: "$19.99",
+    annual: "$199.99",
+    annualLabel: "Saves ~$40",
+    description: "Most teams choose this.",
+    popular: true,
+    features: [
+      "Unlimited uploads",
+      "Python + Java",
+      "GitHub push",
+      "Priority support",
+    ],
+  },
+  {
+    key: "enterprise",
+    name: "Enterprise",
+    monthly: "$39.99",
+    annual: "$399.99",
+    annualLabel: "Saves ~$80",
+    description: "For QA organizations.",
+    features: [
+      "Everything in Pro",
+      "Jenkins / GitLab CI",
+      "Team seats",
+      "Dedicated support",
+    ],
+  },
+] as const;

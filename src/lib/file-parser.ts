@@ -1,5 +1,4 @@
 import * as XLSX from "xlsx";
-import mammoth from "mammoth";
 
 export async function extractFileText(file: File) {
   const fileName = file.name.toLowerCase();
@@ -17,10 +16,5 @@ export async function extractFileText(file: File) {
     return XLSX.utils.sheet_to_csv(firstSheet);
   }
 
-  if (fileName.endsWith(".docx")) {
-    const { value } = await mammoth.extractRawText({ buffer });
-    return value;
-  }
-
-  throw new Error("Unsupported file type. Use .xlsx, .csv, or .docx");
+  throw new Error("Unsupported file type. Use .xlsx or .csv");
 }

@@ -1,9 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { AppShell } from "@/components/app-shell";
 
 export const metadata: Metadata = {
-  title: "TestLift",
-  description: "Upload manual test cases and generate Selenium automation.",
+  title: "TestLift - AI test automation",
+  description: "Turn manual test cases into Selenium scripts in minutes.",
 };
 
 export default function RootLayout({
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }
