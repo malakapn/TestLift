@@ -130,7 +130,7 @@ export default function SignInPage() {
           </div>
           <button
             type="submit"
-            className="w-full rounded-[10px] bg-[var(--accent)] px-4 py-2.5 font-semibold text-black transition hover:brightness-110"
+            className="w-full rounded-[10px] bg-[var(--accent)] px-4 py-2.5 font-semibold text-white transition hover:brightness-110"
           >
             Sign in →
           </button>

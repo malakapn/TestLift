@@ -368,7 +368,7 @@ export default function WorkflowPage() {
           >
             + New Test Case
           </button>
-          <Link href="/signin" className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-semibold text-black">
+          <Link href="/signin" className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-semibold text-white">
             Account
           </Link>
         </div>
@@ -593,10 +593,10 @@ export default function WorkflowPage() {
               </div>
             </div>
             <div className="mt-6 flex justify-end gap-2">
-              <button type="button" onClick={() => setOpenModal(false)} className="rounded-md border border-[var(--border2)] px-4 py-2 text-sm">
+              <button type="button" onClick={() => setOpenModal(false)} className="rounded-md border border-[var(--border2)] bg-transparent px-4 py-2 text-sm text-[var(--txt)]">
                 Cancel
               </button>
-              <button type="submit" className="rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-black">
+              <button type="submit" className="rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white">
                 Submit
               </button>
             </div>

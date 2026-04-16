@@ -16,7 +16,7 @@ export default function HomePage() {
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
               href="/workflow"
-              className="rounded-lg bg-[var(--accent)] px-6 py-3 font-semibold text-black transition hover:brightness-110"
+              className="rounded-lg bg-[var(--accent)] px-6 py-3 font-semibold text-white transition hover:brightness-110"
             >
               Get Started for Free
             </Link>
@@ -110,7 +110,7 @@ export default function HomePage() {
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <Link
               href="/workflow"
-              className="rounded-lg bg-[var(--accent)] px-6 py-3 font-semibold text-black transition hover:brightness-110"
+              className="rounded-lg bg-[var(--accent)] px-6 py-3 font-semibold text-white transition hover:brightness-110"
             >
               Get Started for Free
             </Link>

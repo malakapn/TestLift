@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Syne, DM_Sans, DM_Mono } from "next/font/google";
 import { GlobalNav } from "@/components/global-nav";
 
@@ -24,6 +24,13 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   title: "TestLift - AI test automation",
   description: "Turn manual test cases into Selenium scripts in minutes.",
+  other: {
+    "color-scheme": "dark",
+  },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -32,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full" style={{ colorScheme: "dark" }}>
       <body className={`${syne.variable} ${dmSans.variable} ${dmMono.variable} min-h-full antialiased`}>
         <GlobalNav />
         <div className="pt-14">{children}</div>

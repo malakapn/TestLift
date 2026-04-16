@@ -1,10 +1,24 @@
+/* Force site color scheme — never inherit from browser */
+:root {
+  color-scheme: dark;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+/* Remove ALL prefers-color-scheme media query overrides */
+/* The site manages its own theme — browser setting is ignored */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg: #09090b;
-  --bg2: #111113;
+  --bg: #0a0a0f;
+  --bg2: #111118;
   --bg3: #18181b;
   --bg4: #1c1c1f;
   --border: #2a2a2e;
@@ -12,23 +26,99 @@
   --txt: #f4f4f5;
   --txt2: #a1a1aa;
   --txt3: #71717a;
-  --accent: #3b82f6;
+  --accent: #4f8ff8;
   --warn: #f59e0b;
   --danger: #ef4444;
-  --info: #3b82f6;
+  --info: #4f8ff8;
   --green: #22c55e;
   --purple: #a78bfa;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--txt);
+  background-color: #0a0a0f !important;
+  color: #ffffff !important;
   font-family: var(--font-body), Arial, sans-serif;
+}
+
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+label,
+div {
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+/* Primary CTA — explicit colors (survives forced light scheme on form controls) */
+button[type="submit"][class*="bg-"],
+button[class*="bg-[var(--accent)]"],
+button[class*="bg-[#4f8ff8]"],
+a[class*="bg-[var(--accent)]"] {
+  background-color: #4f8ff8 !important;
+  color: #ffffff !important;
+  border: none !important;
+  cursor: pointer;
+}
+
+button[class*="bg-[var(--green)]"] {
+  background-color: var(--green) !important;
+  color: #052e16 !important;
+  border: none !important;
+  cursor: pointer;
+}
+
+button[class*="bg-[var(--warn)]"] {
+  background-color: var(--warn) !important;
+  color: #1c1917 !important;
+  border: none !important;
+  cursor: pointer;
+}
+
+/* Ghost / outline — only targets explicit transparent + bordered buttons */
+button[class*="bg-transparent"][class*="border"] {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: 1px solid #333337 !important;
+  cursor: pointer;
+}
+
+button:disabled,
+button[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+textarea,
+select {
+  background-color: #1c1c1f !important;
+  color: #ffffff !important;
+  border: 1px solid #333337 !important;
+  caret-color: #ffffff;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #71717a !important;
+  opacity: 1 !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #1c1c1f inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
 }
 
 code,
