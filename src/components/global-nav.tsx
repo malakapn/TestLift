@@ -43,7 +43,7 @@ export function GlobalNav() {
               <rect x="12" y="12" width="7" height="7" rx="3.5" fill="transparent" stroke="#4f8ff8" strokeWidth="1.2" />
               <path
                 d="M15.5 18 L15.5 14 M13.8 15.8 L15.5 14 L17.2 15.8"
-                stroke="#4f8ff8"
+                stroke="#ffffff"
                 strokeWidth="1.1"
                 strokeLinecap="round"
                 strokeLinejoin="round"
