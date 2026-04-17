@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 
 type CaseStatus = "draft" | "review" | "approved" | "pipeline" | "rejected";
@@ -16,6 +16,13 @@ type ApprovalStage = {
   timestamp?: string;
 };
 
+type ActivityEntry = {
+  id: string;
+  text: string;
+  actor?: string;
+  time?: string;
+};
+
 type TestCase = {
   id: string;
   tag: string;
@@ -27,8 +34,14 @@ type TestCase = {
   steps: string[];
   detailOwner: string;
   stages: ApprovalStage[];
-  activity: string[];
+  activity: ActivityEntry[];
 };
+
+function genActivityId() {
+  return typeof crypto !== "undefined" && crypto.randomUUID
+    ? crypto.randomUUID()
+    : `act-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
 
 const seedCases: TestCase[] = [
   {
@@ -85,7 +98,7 @@ const seedCases: TestCase[] = [
         timestamp: "2m ago",
       },
     ],
-    activity: ["Pipeline gate unlocked and test marked CI/CD ready."],
+    activity: [{ id: "seed-tl001-a1", text: "Pipeline gate unlocked and test marked CI/CD ready." }],
   },
   {
     id: "TL-002",
@@ -131,7 +144,7 @@ const seedCases: TestCase[] = [
         state: "locked",
       },
     ],
-    activity: ["Awaiting SDET sign-off for scope edge-case matrix."],
+    activity: [{ id: "seed-tl002-a1", text: "Awaiting SDET sign-off for scope edge-case matrix." }],
   },
   {
     id: "TL-003",
@@ -154,7 +167,7 @@ const seedCases: TestCase[] = [
       { title: "Stage 3 — QA Lead Approval", role: "QA Lead", assignedTo: "Jae-lin Oh", state: "locked" },
       { title: "Stage 4 — Pipeline Gate", role: "Eng Manager", assignedTo: "Taylor Moss", state: "locked" },
     ],
-    activity: ["Draft created and pending initial QA review."],
+    activity: [{ id: "seed-tl003-a1", text: "Draft created and pending initial QA review." }],
   },
   {
     id: "TL-004",
@@ -177,7 +190,7 @@ const seedCases: TestCase[] = [
       { title: "Stage 3 — QA Lead Approval", role: "QA Lead", assignedTo: "Jae-lin Oh", state: "locked" },
       { title: "Stage 4 — Pipeline Gate", role: "Eng Manager", assignedTo: "Taylor Moss", state: "locked" },
     ],
-    activity: ["Pending QA Engineer review assignment acceptance."],
+    activity: [{ id: "seed-tl004-a1", text: "Pending QA Engineer review assignment acceptance." }],
   },
   {
     id: "TL-005",
@@ -200,7 +213,7 @@ const seedCases: TestCase[] = [
       { title: "Stage 3 — QA Lead Approval", role: "QA Lead", assignedTo: "Jae-lin Oh", state: "active" },
       { title: "Stage 4 — Pipeline Gate", role: "Eng Manager", assignedTo: "Taylor Moss", state: "locked" },
     ],
-    activity: ["Approved and awaiting final pipeline gate action."],
+    activity: [{ id: "seed-tl005-a1", text: "Approved and awaiting final pipeline gate action." }],
   },
 ];
 
@@ -224,8 +237,21 @@ export default function WorkflowPage() {
   const [newTag, setNewTag] = useState(categories[0]);
   const [newReviewer, setNewReviewer] = useState(reviewers[0]);
   const [flashKey, setFlashKey] = useState(0);
+  const [sidebarSection, setSidebarSection] = useState<
+    "overview" | "testcases" | "approvals" | "pipeline" | "settings"
+  >("overview");
+  const [commentPanelOpen, setCommentPanelOpen] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [commentError, setCommentError] = useState<string | null>(null);
+  const [removingActivityId, setRemovingActivityId] = useState<string | null>(null);
 
   const selected = useMemo(() => cases.find((item) => item.id === selectedId) ?? cases[0], [cases, selectedId]);
+
+  useEffect(() => {
+    setCommentPanelOpen(false);
+    setCommentText("");
+    setCommentError(null);
+  }, [selectedId]);
 
   const counts = useMemo(() => {
     const pending = cases.filter((item) => item.status === "draft").length;
@@ -238,7 +264,7 @@ export default function WorkflowPage() {
 
   function showToast(message: string) {
     setToast(message);
-    window.setTimeout(() => setToast(null), 2200);
+    window.setTimeout(() => setToast(null), 2500);
   }
 
   function updateCaseStatus(next: CaseStatus, action: "approve" | "reject" | "request") {
@@ -275,7 +301,10 @@ export default function WorkflowPage() {
               lastUpdated: "just now",
               stages: nextStages,
               activity: [
-                `${action === "approve" ? "Approved" : action === "reject" ? "Rejected" : "Requested changes"} by current reviewer`,
+                {
+                  id: genActivityId(),
+                  text: `${action === "approve" ? "Approved" : action === "reject" ? "Rejected" : "Requested changes"} by current reviewer`,
+                },
                 ...item.activity,
               ],
             }
@@ -310,7 +339,13 @@ export default function WorkflowPage() {
     if (!selected) return;
     setCases((prev) =>
       prev.map((item) =>
-        item.id === selected.id ? { ...item, activity: ["Requested changes — status retained.", ...item.activity], lastUpdated: "just now" } : item
+        item.id === selected.id
+          ? {
+              ...item,
+              activity: [{ id: genActivityId(), text: "Requested changes — status retained." }, ...item.activity],
+              lastUpdated: "just now",
+            }
+          : item
       )
     );
     setFlashKey((key) => key + 1);
@@ -340,7 +375,7 @@ export default function WorkflowPage() {
         { title: "Stage 3 — QA Lead Approval", role: "QA Lead", assignedTo: "Jae-lin Oh", state: "locked" },
         { title: "Stage 4 — Pipeline Gate", role: "Eng Manager", assignedTo: "Taylor Moss", state: "locked" },
       ],
-      activity: ["Test case submitted — awaiting reviewer sign-off"],
+      activity: [{ id: genActivityId(), text: "Test case submitted — awaiting reviewer sign-off" }],
     };
     setCases((prev) => [created, ...prev]);
     setSelectedId(created.id);
@@ -353,6 +388,61 @@ export default function WorkflowPage() {
   }
 
   const disableActions = !selected || selected.status === "pipeline" || selected.status === "rejected";
+
+  function openCommentPanel() {
+    if (disableActions) return;
+    setCommentError(null);
+    setCommentPanelOpen(true);
+  }
+
+  function closeCommentPanel() {
+    setCommentPanelOpen(false);
+    setCommentText("");
+    setCommentError(null);
+  }
+
+  function saveComment() {
+    const trimmed = commentText.trim();
+    if (!trimmed) {
+      setCommentError("Comment cannot be empty");
+      return;
+    }
+    if (!selected) return;
+    setCases((prev) =>
+      prev.map((item) =>
+        item.id === selected.id
+          ? {
+              ...item,
+              activity: [
+                { id: genActivityId(), text: trimmed, actor: "You", time: "just now" },
+                ...item.activity,
+              ],
+              lastUpdated: "just now",
+            }
+          : item
+      )
+    );
+    setFlashKey((k) => k + 1);
+    setCommentText("");
+    setCommentPanelOpen(false);
+    setCommentError(null);
+    showToast("Comment added");
+  }
+
+  function deleteActivityEntry(entryId: string) {
+    const caseId = selected?.id;
+    if (!caseId) return;
+    setRemovingActivityId(entryId);
+    window.setTimeout(() => {
+      setCases((prev) =>
+        prev.map((item) =>
+          item.id === caseId ? { ...item, activity: item.activity.filter((a) => a.id !== entryId) } : item
+        )
+      );
+      setRemovingActivityId(null);
+      showToast("Comment deleted");
+    }, 200);
+  }
 
   return (
     <main className="min-h-screen bg-[var(--bg)] text-[var(--txt)]">
@@ -377,11 +467,24 @@ export default function WorkflowPage() {
       <div className="flex pt-14">
         <aside className="fixed left-0 top-14 flex h-[calc(100vh-56px)] w-[220px] flex-col justify-between border-r border-[var(--border)] bg-[var(--bg2)] p-4">
           <div className="space-y-2 text-sm">
-            <SidebarItem label="Overview" active />
-            <SidebarItem label={`Test Cases (${cases.length})`} />
-            <SidebarItem label={`Approvals (${counts.inReview})`} warn />
-            <SidebarItem label="Pipeline Status" />
-            <SidebarItem label="Settings" disabled />
+            <SidebarNavButton section="overview" activeSection={sidebarSection} onSelect={setSidebarSection}>
+              Overview
+            </SidebarNavButton>
+            <SidebarNavButton section="testcases" activeSection={sidebarSection} onSelect={setSidebarSection}>
+              Test Cases ({cases.length})
+            </SidebarNavButton>
+            <SidebarNavButton section="approvals" activeSection={sidebarSection} onSelect={setSidebarSection}>
+              <span className="font-semibold" style={{ color: "inherit" }}>
+                Approvals{" "}
+              </span>
+              <span className="workflow-approvals-count font-semibold">({counts.inReview})</span>
+            </SidebarNavButton>
+            <SidebarNavButton section="pipeline" activeSection={sidebarSection} onSelect={setSidebarSection}>
+              Pipeline Status
+            </SidebarNavButton>
+            <SidebarNavButton section="settings" activeSection={sidebarSection} onSelect={setSidebarSection}>
+              Settings
+            </SidebarNavButton>
           </div>
           <div className="rounded-[10px] border border-[var(--border)] bg-[var(--bg3)] p-3 text-xs">
             <StatusLine label="Pending" value={counts.pending} color="text-[var(--warn)]" />
@@ -445,7 +548,7 @@ export default function WorkflowPage() {
             </div>
           </div>
 
-          <div className="relative bg-[var(--bg)] p-5 pb-24">
+          <div className="relative min-h-[calc(100vh-3.5rem)] bg-[var(--bg)] p-5 pb-24">
             {selected && (
               <>
                 <section className="rounded-[14px] border border-[var(--border)] bg-[var(--bg2)] p-5">
@@ -500,13 +603,99 @@ export default function WorkflowPage() {
 
                 <section className="mt-4 rounded-[14px] border border-[var(--border)] bg-[var(--bg2)] p-5">
                   <h3 className="text-lg font-bold">Activity</h3>
-                  <ul className="mt-3 space-y-2 text-sm text-[var(--txt2)]">
-                    {selected.activity.slice(0, 4).map((line) => (
-                      <li key={line}>• {line}</li>
+                  <ul className="mt-3 list-none space-y-1 p-0 text-sm">
+                    {selected.activity.map((entry) => (
+                      <li
+                        key={entry.id}
+                        className={`workflow-activity-row items-start ${
+                          removingActivityId === entry.id ? "pointer-events-none opacity-0" : "opacity-100"
+                        }`}
+                      >
+                        <div className="min-w-0 flex-1">
+                          {entry.actor ? (
+                            <>
+                              <p className="text-[var(--txt2)]" style={{ color: "#e4e4e7" }}>
+                                • {entry.actor} · {entry.time}
+                              </p>
+                              <p className="mt-0.5 pl-3 text-[var(--txt2)]" style={{ color: "#e4e4e7" }}>
+                                {entry.text}
+                              </p>
+                            </>
+                          ) : (
+                            <p className="text-[var(--txt2)]" style={{ color: "#e4e4e7" }}>
+                              • {entry.text}
+                            </p>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          className="workflow-activity-delete flex-shrink-0 rounded px-1.5 py-0.5 text-[12px] transition hover:bg-[#ef444418]"
+                          style={{ color: "#ef4444" }}
+                          onClick={() => deleteActivityEntry(entry.id)}
+                          aria-label="Delete activity"
+                        >
+                          ✕
+                        </button>
+                      </li>
                     ))}
                   </ul>
                 </section>
               </>
+            )}
+
+            {selected && commentPanelOpen && (
+              <div className="workflow-comment-panel-open absolute bottom-0 left-0 right-0 z-50 rounded-t-[12px] border-t-2 border-[#4f8ff8] bg-[#131320] p-5">
+                <div className="mb-[14px] flex items-center justify-between">
+                  <span className="text-[14px] font-bold" style={{ color: "#ffffff" }}>
+                    Add Comment
+                  </span>
+                  <button
+                    type="button"
+                    onClick={closeCommentPanel}
+                    className="rounded px-1.5 py-0.5 text-[16px] transition hover:bg-[#1e1e30]"
+                    style={{ background: "transparent", border: "none", color: "#6b7aaa", cursor: "pointer", padding: "2px 6px" }}
+                    aria-label="Close comment panel"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <textarea
+                  value={commentText}
+                  onChange={(e) => {
+                    setCommentText(e.target.value);
+                    if (commentError) setCommentError(null);
+                  }}
+                  placeholder="Write your comment..."
+                  className="workflow-comment-textarea"
+                />
+                {commentError && (
+                  <p className="mt-2 text-[13px]" style={{ color: "#ef4444" }}>
+                    {commentError}
+                  </p>
+                )}
+                <div className="mt-[14px] flex justify-end gap-[10px]">
+                  <button
+                    type="button"
+                    onClick={closeCommentPanel}
+                    className="rounded-md transition hover:bg-[#1e1e30]"
+                    style={{
+                      padding: "8px 16px",
+                      borderRadius: 6,
+                      border: "1px solid #252535",
+                      background: "transparent",
+                      color: "#b0bbd8",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button type="button" onClick={saveComment} className="workflow-comment-save rounded-md" style={{ padding: "8px 16px", borderRadius: 6, border: "none", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                    Save Comment
+                  </button>
+                </div>
+              </div>
             )}
 
             <div className="fixed bottom-0 left-[220px] right-0 z-20 border-t border-[var(--border)] bg-[var(--bg2)] p-3">
@@ -533,7 +722,8 @@ export default function WorkflowPage() {
                   ↺ Request Changes
                 </button>
                 <button
-                  onClick={() => showToast("Comment panel opened")}
+                  type="button"
+                  onClick={openCommentPanel}
                   disabled={disableActions}
                   className="rounded-md border border-[var(--border2)] bg-transparent px-4 py-2 text-sm font-semibold text-[var(--txt)] disabled:cursor-not-allowed disabled:opacity-40"
                 >
@@ -604,30 +794,27 @@ export default function WorkflowPage() {
         </div>
       )}
 
-      {toast && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-[10px] border border-[var(--border2)] bg-[var(--bg3)] px-4 py-3 text-sm shadow-xl transition">
-          {toast}
-        </div>
-      )}
+      {toast && <div className="workflow-toast">{toast}</div>}
     </main>
   );
 }
 
-function SidebarItem({ label, active, warn, disabled }: { label: string; active?: boolean; warn?: boolean; disabled?: boolean }) {
+function SidebarNavButton({
+  section,
+  activeSection,
+  onSelect,
+  children,
+}: {
+  section: "overview" | "testcases" | "approvals" | "pipeline" | "settings";
+  activeSection: typeof section;
+  onSelect: (s: typeof section) => void;
+  children: ReactNode;
+}) {
+  const active = activeSection === section;
   return (
-    <div
-      className={`rounded-md px-3 py-2 transition ${
-        disabled
-          ? "cursor-not-allowed text-[var(--txt3)] opacity-50"
-          : active
-          ? "bg-[var(--bg3)] text-[var(--txt)]"
-          : warn
-          ? "text-[var(--warn)]"
-          : "text-[var(--txt2)] hover:bg-[var(--bg3)]"
-      }`}
-    >
-      {label}
-    </div>
+    <button type="button" onClick={() => onSelect(section)} className={`workflow-sidebar-item ${active ? "workflow-sidebar-item--active" : ""}`}>
+      {children}
+    </button>
   );
 }
 

@@ -9,6 +9,11 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* Remove ALL prefers-color-scheme media query overrides */
 /* The site manages its own theme — browser setting is ignored */
 
@@ -154,4 +159,135 @@ pre,
     transform: scale(1.25);
     opacity: 0.8;
   }
+}
+
+/* Workflow page — sidebar nav (explicit colors; not browser-inherited) */
+.workflow-sidebar-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  border-left: 2px solid transparent;
+  padding: 8px 10px 8px 10px;
+  font-weight: 600 !important;
+  color: #b0bbd8 !important;
+  background: transparent !important;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.workflow-sidebar-item:hover {
+  background: var(--bg3) !important;
+  color: #b0bbd8 !important;
+}
+
+.workflow-sidebar-item--active {
+  color: #4f8ff8 !important;
+  background: var(--bg3) !important;
+  border-left-color: #4f8ff8 !important;
+}
+
+.workflow-sidebar-item--active:hover {
+  color: #4f8ff8 !important;
+}
+
+.workflow-approvals-count {
+  color: #fbbf24 !important;
+}
+
+.workflow-activity-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 4px;
+  border-radius: 6px;
+  position: relative;
+  transition: background 150ms ease, opacity 200ms ease, max-height 200ms ease;
+}
+
+.workflow-activity-row:hover {
+  background: #131320 !important;
+}
+
+.workflow-activity-delete {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.workflow-activity-row:hover .workflow-activity-delete {
+  opacity: 1;
+}
+
+.workflow-comment-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: #0c0c14 !important;
+  color: #ffffff !important;
+  border: 1px solid #252535 !important;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: Inter, system-ui, sans-serif;
+  resize: vertical;
+  outline: none !important;
+}
+
+.workflow-comment-textarea::placeholder {
+  color: #4a5578 !important;
+  opacity: 1 !important;
+}
+
+.workflow-comment-textarea:focus {
+  border-color: #4f8ff8 !important;
+  outline: none !important;
+}
+
+@keyframes workflowToastIn {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.workflow-toast {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  z-index: 200;
+  background: #1a2440 !important;
+  border: 1px solid rgba(79, 143, 248, 0.2);
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
+  animation: workflowToastIn 300ms ease-out forwards;
+}
+
+@keyframes workflowCommentPanelIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.workflow-comment-panel-open {
+  animation: workflowCommentPanelIn 250ms ease-out forwards;
+}
+
+.workflow-comment-save {
+  background: #4f8ff8 !important;
+  color: #ffffff !important;
+}
+
+.workflow-comment-save:hover {
+  background: #3a7fe8 !important;
 }
